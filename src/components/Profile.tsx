@@ -5,8 +5,6 @@ const Profile = () => {
   const auth = useAuth();
   const { authorized, user } = auth;
 
-  console.log(authorized, user);
-
   if (!authorized) {
     return null;
   }

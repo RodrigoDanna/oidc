@@ -11,7 +11,7 @@ const useAuth = () => {
 
   useEffect(() => { 
     setAuthorized(isAuthenticated());
-    getUser().then(u => setUser(u));
+    getUser().then((u: React.SetStateAction<User | null>) => setUser(u));
   }, []);
 
   return {

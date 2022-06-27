@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import { UserManager } from 'oidc-client-ts'
 
-export default class OidcClient {
-
+export default class ClientOidc {
     private _userManager: UserManager
     
     private _authority: string
@@ -11,11 +10,9 @@ export default class OidcClient {
     private _client_id: string
 
     public constructor() {
-
         this._authority = 'https://dev-flex-login.compusoftgroup.com';
         this._signin_callback = '';
         this._signout_callback = '';
-        // this._client_id = 'contentStudio2020';
         this._client_id = 'IdealSpaces7';
 
         this._userManager = new UserManager({
@@ -38,7 +35,6 @@ export default class OidcClient {
         this._userManager.events.addUserLoaded((user) => {
             let uri = sessionStorage.getItem('redirectUri')
             if (uri) {
-                console.log(uri);
                 sessionStorage.removeItem('redirectUri');
                 window.location.replace(uri);
             }
@@ -60,12 +56,19 @@ export default class OidcClient {
         return false;
     }
 
-    public signin = async () => {
+    public signin = async (email:string) => {
+        let domain = "";
+
+        if (email) {
+            domain = email.substring(email.lastIndexOf("@") + 1);
+        }
+        
         sessionStorage.setItem('redirectUri', `${window.location.pathname}${window.location.search}`);
 
         this._userManager.signinRedirect({
             extraQueryParams: {
-                bypass: true
+                bypass: true,
+                domain_hint: domain
             }
         });
     }
